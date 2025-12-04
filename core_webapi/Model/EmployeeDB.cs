@@ -63,5 +63,50 @@ namespace core_webapi.Model
 
             }
         }
+        public string deleteDB(int id)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_delete", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return ("OK....");
+            }
+            catch(Exception ex)
+            {
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return (ex.Message.ToString());
+            }
+        }
+        public string updateprofile(int id,emp_table objcls)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_profileupdate", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@eid", objcls.emp_id);
+                cmd.Parameters.AddWithValue("@esal", objcls.emp_salary);
+                cmd.Parameters.AddWithValue("@eaddr", objcls.emp_address);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return ("Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return ex.Message.ToString();
+
+            }
+        }
     }
 }

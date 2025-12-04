@@ -37,15 +37,19 @@ namespace core_webapi.Controllers
         }
 
         // PUT api/<EmpDetailsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Route("puttab/{id}")]
+        public void Put(int id,[FromForm] emp_table clsobj)
         {
+            dbobj.updateprofile(id,clsobj);
         }
 
         // DELETE api/<EmpDetailsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("deletetab/{id}")]
         public void Delete(int id)
         {
+            dbobj.deleteDB(id);
         }
     }
 }
