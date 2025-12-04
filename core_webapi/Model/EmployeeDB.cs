@@ -1,0 +1,67 @@
+﻿using System.Data;
+using System.Data.SqlClient;
+
+namespace core_webapi.Model
+{
+    public class EmployeeDB
+    {
+        SqlConnection con = new SqlConnection(@"server=LAPTOP-USLUAF59\SQLEXPRESS;database=aspcore;integrated security=true");
+        public string InsertDB(emp_table objcls)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_insert", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empna", objcls.emp_name);
+                cmd.Parameters.AddWithValue("@empaddr", objcls.emp_address);
+                cmd.Parameters.AddWithValue("@empsal", objcls.emp_salary);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return ("Inserted Successfully");
+            }
+            catch (Exception ex)
+            {
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return ex.Message.ToString();
+            }
+        }
+        public List<emp_table> selectDB()
+        {
+            var list = new List<emp_table>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_selectall", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                con.Open();
+                SqlDataReader sdr = cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    var o = new emp_table
+                    {
+                        emp_id = Convert.ToInt32(sdr["emp_id"]),
+                        emp_name = sdr["emp_name"].ToString(),
+                        emp_address = sdr["emp_address"].ToString(),
+                        emp_salary = sdr["emp_salary"].ToString()
+                    };
+                    list.Add(o);
+
+                }
+                con.Close();
+                return list;
+            }
+            catch (Exception)
+            {
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                throw;
+
+            }
+        }
+    }
+}
