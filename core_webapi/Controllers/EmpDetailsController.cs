@@ -39,7 +39,7 @@ namespace core_webapi.Controllers
         // PUT api/<EmpDetailsController>/5
         [HttpPut]
         [Route("puttab/{id}")]
-        public void Put(int id,[FromForm] emp_table clsobj)
+        public void Put(int id,[FromBody] emp_table clsobj)
         {
             dbobj.updateprofile(id,clsobj);
         }
